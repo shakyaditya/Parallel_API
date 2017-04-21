@@ -22,12 +22,20 @@ def test():
 @app.route('/search', methods= ['POST' , 'GET'])
 def search():
 	# inp = request.json['query']
-	# inp = request.args.get("q")
-	inp = "the+dark+knight"
-	print inp
-	url = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyDe-kSqgLS-GZEmWGtORA_cK7jCTcUKxRs&cx=017576662512468239146:omuauf_lfve&q='
+	inp = request.args.get("q")
+	inpu =  inp.split(' ')
+	inp = "" 
+	for a in inpu : 
+		inp = inp + a + "+"
+	inp = inp[:len(inp)-1]; 	
+	# inp = "the+dark+knight"
+	# print inp
+	# inpu  = inp.split[" "] ;
+	# print inpu 
+
+	url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyDe-kSqgLS-GZEmWGtORA_cK7jCTcUKxRs&cx=017576662512468239146:omuauf_lfve&q="
 	url += inp 
-	# print url 
+	print url 
 	req = Request(url)
 	#get google results  
 	try:
@@ -44,7 +52,7 @@ def search():
 			djs = json.loads(dkit)
 			dresult = {"link": djs['RelatedTopics'][0]['FirstURL'] , "text" : djs['RelatedTopics'][0]['Text'] } 
 			# get twitter results 
-			url2 ="https://api.twitter.com/1.1/search/tweets.json?q="+ "the dark knight"
+			url2 ="https://api.twitter.com/1.1/search/tweets.json?q="+ inp
 			consumer = oauth.Consumer(key= API_Key , secret = API_Secret); 
 			access_token =	oauth.Token(key= Access_Token , secret = Access_Token_Secret) ;
 			client = oauth.Client(consumer , access_token) ; 
